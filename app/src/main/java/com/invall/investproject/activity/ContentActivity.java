@@ -12,9 +12,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.invall.investproject.R;
 import com.invall.investproject.model.ContentData;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 import com.squareup.picasso.Picasso;
 
 public class ContentActivity extends AppCompatActivity {
@@ -23,6 +28,7 @@ public class ContentActivity extends AppCompatActivity {
     TextView titleText;
     ImageView fullpic;
     Button buttonInvest;
+    Boolean isVideoContent = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,22 +48,27 @@ public class ContentActivity extends AppCompatActivity {
         fullpic = findViewById(R.id.fullpic);
         fullText.setMovementMethod(new ScrollingMovementMethod());
         buttonInvest = findViewById(R.id.investadsbut);
-        buttonInvest.setText(SplashActivity.mData.getInvestbutton());
 
         if(SplashActivity.mData.getInvestads())
             buttonInvest.setVisibility(View.VISIBLE);
 
-        buttonInvest.setOnClickListener(v -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(SplashActivity.mData.getInvestlink()));
-            startActivity(browserIntent);
-        });
-
         contentData = getCurrentDataFromList();
 
         if(contentData != null){
+            prepareVideo();
+            buttonInvest.setText(contentData.getInvestbutton());
+            buttonInvest.setOnClickListener(v -> {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(contentData.getInvestlink()));
+                startActivity(browserIntent);
+            });
+
             fullText.setText(contentData.getFulltext());
             titleText.setText(contentData.getCardtitle());
-            Picasso.get().load(contentData.getFullpic()).into(fullpic);
+            if (!isVideoContent){
+                Picasso.get().load(contentData.getFullpic()).into(fullpic);
+            } else {
+                fullpic.setVisibility(View.GONE);
+            }
             setTitle(contentData.getCardtitle());
         }
     }
@@ -82,5 +93,21 @@ public class ContentActivity extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
+    }
+
+    public void prepareVideo(){
+        if (!contentData.getVideo().equals("")){
+            isVideoContent = true;
+            YouTubePlayerView youTubePlayerView = findViewById(R.id.youtube_player_view);
+            getLifecycle().addObserver(youTubePlayerView);
+            youTubePlayerView.setVisibility(View.VISIBLE);
+            youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                @Override
+                public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                    String videoId = contentData.getVideo();
+                    youTubePlayer.loadVideo(videoId, 0);
+                }
+            });
+        }
     }
 }

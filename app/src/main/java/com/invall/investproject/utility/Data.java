@@ -111,10 +111,10 @@ public class Data {
     public static class Json {
         private Map<String, Map<String, String>> contentData;
         private Boolean investads;
-        private String investlink;
-        private String investbutton;
+        private String defaultLang;
 
         public Map<String, Map<String, String>> getDataContent() { return contentData; }
+
         public void setContentData(Map<String, Map<String, String>> contentData) { this.contentData = contentData; }
 
         public boolean isEmpty() {
@@ -125,12 +125,12 @@ public class Data {
             return investads;
         }
 
-        public String getInvestlink() {
-            return investlink;
+        public String getDefaultLang() {
+            return defaultLang;
         }
 
-        public String getInvestbutton() {
-            return investbutton;
+        public void setDefaultLang(String defaultLang) {
+            this.defaultLang = defaultLang;
         }
     }
 }

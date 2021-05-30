@@ -7,15 +7,24 @@ public class ContentData {
     private String cardtext;
     private String fulltext;
     private String fullpic;
+    private String investlink;
+    private String investbutton;
+    private String local;
+    private String video;
 
     public ContentData(String contentKey, String cardimage, String cardtitle, String cardtext,
-                       String fulltext, String fullpic) {
+                       String fulltext, String fullpic, String investbutton, String investlink, String local,
+                       String video) {
         this.contentKey = contentKey;
         this.cardimage = cardimage;
         this.cardtitle = cardtitle;
         this.cardtext = cardtext;
         this.fulltext = fulltext;
         this.fullpic = fullpic;
+        this.investbutton = investbutton;
+        this.investlink = investlink;
+        this.local = local;
+        this.video = video;
     }
 
     public String getCardimage() {
@@ -66,4 +75,35 @@ public class ContentData {
         this.contentKey = contentKey;
     }
 
+    public String getInvestlink() {
+        return investlink;
+    }
+
+    public void setInvestlink(String investlink) {
+        this.investlink = investlink;
+    }
+
+    public String getInvestbutton() {
+        return investbutton;
+    }
+
+    public void setInvestbutton(String investbutton) {
+        this.investbutton = investbutton;
+    }
+
+    public String getLocal() {
+        return local;
+    }
+
+    public void setLocal(String local) {
+        this.local = local;
+    }
+
+    public String getVideo() {
+        return video == null ? "" : video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
+    }
 }
